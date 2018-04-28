@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        function consultar() {
+            var regioes = document.getElementById("regioes");
+            var nome = $("input#nomeAnimal").prop("value");
+            var regiaoSelecionada = "";
+
+            for (var i = 0; i < regioes.length; i++) {
+                if (regioes[i].selected) {
+                    regiaoSelecionada = regioes[i].value;
+                }
+            }
+            situacaoAnimal(regiaoSelecionada, nome);
+        }
+
+        function situacaoAnimal(regiao, animal) {
+
+            var parent = document.getElementsByTagName("ul");
+            var resultado = document.getElementById("resultado");
+            var encontrado = false;
+
+            for (var i = 0; i < parent.length; i++) {
+
+                var regiaoLista = parent[i].getAttribute("regiao");
+
+                if (regiao === regiaoLista) {
+
+                    var childrens = parent[i].children;
+
+                    for (var j = 0; j < childrens.length; j++) {
+
+                        var dado_animal = childrens[j].getAttribute("data-animal");
+
+                        if (dado_animal == animal.toLowerCase()) {
+
+                            resultado.innerText = childrens[j].innerText;
+                            encontrado = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!encontrado) {
+                if (animal == "") {
+                    resultado.innerText = "É preciso digitar o nome do animal";
+                } else {
+                    resultado.innerText = "Animal não encontrado";
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+<label class="label-control">Consultar Situação do Animal</label>
+<br/><br/>
+
+<select id="regioes" selec>
+    <option value="Norte">Norte</option>
+    <option value="Sul">Sul</option>
+</select>
+
+<input id="nomeAnimal" class="form-control" style="width:200px" type="text"/>
+<button class="btn btn-info" onclick="consultar()">Pesquisar</button>
+
+<p id="resultado"></p>
+
+<div hidden="true">
+    <ul regiao="Norte">
+        <li data-animal="condor negro">Ameaçado de Extinção</li>
+        <li data-animal="sapo cururu">Abundante</li>
+    </ul>
+    <ul regiao="Sul">
+        <li data-animal="mamute">Extinto</li>
+    </ul>
+</div>
+</body>
+</html>
